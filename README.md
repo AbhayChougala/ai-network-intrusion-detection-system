@@ -110,7 +110,7 @@ http://localhost:5000
 
 ## Project Structure
 
-
+'''
 network-security-project/
 │── app.py
 │── sniffer.py
@@ -118,14 +118,17 @@ network-security-project/
 │── requirements.txt
 │── logs.csv
 │── logs_history.csv
-│── static/
+│
+├── static/
 │ ├── graph.png
 │ ├── protocol_chart.png
-│ ├── attack_chart.png
-│── templates/
+│ └── attack_chart.png
+│
+├── templates/
 │ └── dashboard.html
-│── README.md
-
+│
+└── README.md
+'''
 
 ---
 
