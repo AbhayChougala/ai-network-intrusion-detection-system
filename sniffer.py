@@ -14,13 +14,14 @@ def process_packet(packet):
         if packet.haslayer("IP"):
             src_ip = packet["IP"].src
             dst_ip = packet["IP"].dst
-
-            proto_num = packet.proto
-            protocol = protocol_map.get(proto_num, str(proto_num))
+            proto = packet["IP"].proto
+            protocol = protocol_map.get(proto, str(proto))
             length = len(packet)
-
-            packet_data.append([src_ip, dst_ip, protocol, length])
-    except:
+            
+            port = packet.sport if packet.haslayer("TCP") or packet.haslayer("UDP") else 0
+            
+            packet_data.append([src_ip, dst_ip, protocol, length, port])
+    except Exception:
         pass
 
 def capture_packets():
@@ -29,7 +30,7 @@ def capture_packets():
 
     sniff(prn=process_packet, count=50)
 
-    df = pd.DataFrame(packet_data, columns=["Source IP", "Destination IP", "Protocol", "Length"])
+    df = pd.DataFrame(packet_data, columns=["Source IP", "Destination IP", "Protocol", "Length", "Port"])
     df.to_csv("logs.csv", index=False)
 
     return df

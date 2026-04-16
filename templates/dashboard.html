@@ -67,7 +67,6 @@
     <p class="{{ 'alert' if anomalies > 5 else 'safe' }}">
         {{ alert_msg }}
     </p>
-    <p>Suspicious Packets Detected: {{ anomalies }}</p>
 </div>
 
 <div class="card">
@@ -82,10 +81,14 @@
             <li>{{ proto }} : {{ count }}</li>
         {% endfor %}
     </ul>
+</div>
 
-    <p style="color: #f87171; font-size: 20px; margin-top: 10px;">
-        🚨 Total Attacks: {{ total_attacks }}
-    </p>
+<div class="card">
+    <h2>Threat Intelligence</h2>
+    <div style="display: flex; justify-content: space-around; font-size: 18px;">
+        <p style="color: #f87171;">Simulated Attacks: {{ simulated }}</p>
+        <p style="color: #38bdf8;">Total Suspicious: {{ anomalies }}</p>
+    </div>
 </div>
 <div class="card">
     <h2>Traffic Graph</h2>

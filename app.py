@@ -3,7 +3,7 @@ from sniffer import capture_packets
 from model import detect_anomalies, simulate_attack
 import pandas as pd
 import matplotlib
-matplotlib.use('Agg')   # ✅ FIX for Mac crash
+matplotlib.use('Agg')   
 import matplotlib.pyplot as plt
 import os
 
@@ -29,6 +29,9 @@ def dashboard():
     df = detect_anomalies(df)
 
     anomalies = df[df['Anomaly'] == -1].shape[0]
+    
+    attack_types = ["DDoS", "Port Scan", "Malware"]
+    simulated_attacks = df[df['Protocol'].isin(attack_types)].shape[0]
 
     if anomalies > 5:
         alert_msg = "HIGH RISK TRAFFIC DETECTED"
@@ -36,12 +39,6 @@ def dashboard():
         alert_msg = "Network is Stable"
 
     protocol_counts = df['Protocol'].value_counts().to_dict()
-
-    attack_types = ["DDoS", "Port Scan", "Malware"]
-
-    # Count total attacks
-    total_attacks = df[df['Protocol'].isin(attack_types)].shape[0]
-
     generate_graph(df)
 
     if os.path.exists("logs_history.csv"):
@@ -51,13 +48,13 @@ def dashboard():
         combined_df = df
 
     combined_df.to_csv("logs_history.csv", index=False)
-
+    
     return render_template("dashboard.html",
-                       tables=df.to_html(classes='data', index=False),
-                       anomalies=anomalies,
-                       alert_msg=alert_msg,
-                       protocol_counts=protocol_counts,
-                       total_attacks=total_attacks)
-
+                           tables=df.to_html(classes='data', index=False),
+                           anomalies=anomalies, 
+                           alert_msg=alert_msg,
+                           simulated=simulated_attacks,
+                           protocol_counts=protocol_counts)
+    
 if __name__ == '__main__':
     app.run(debug=True)
